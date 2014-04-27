@@ -6,13 +6,29 @@ using System.Drawing;
 
 namespace FOCommon.Graphic
 {
+    public class FalloutFRM
+    {
+        public string FileName { get; set; }
+        public List<Bitmap> Frames;
+        public Point PixelShift { get; set; }
+    }
+
     /// <summary>
     /// Copyleft 1999 by Borg Locutus (dystopia@iname.com)
     /// See http://140.112.31.133/~Borg/f2/
     /// Minor modifications by Wipe/Rotators
     /// </summary>
-    public class FalloutFRM // .frm
+    public class FalloutFRMLoader // .frm
     {
+        public static FalloutFRM LoadFRM(byte[] buffer, Color transparency)
+        {
+            FalloutFRM frm = new FalloutFRM();
+            frm.Frames = Load(buffer, transparency);
+            frm.PixelShift = new Point(FalloutFRMLoader.GetPixelShiftX(buffer),
+                                       FalloutFRMLoader.GetPixelShiftY(buffer));
+            return frm;
+        }
+
         public static short GetPixelShiftX(byte[] buffer)
         {
             return (short)((buffer[0x0A] << 8) + buffer[0x0A + 1]);
