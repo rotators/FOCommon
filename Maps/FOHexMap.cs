@@ -9,6 +9,7 @@
     {
         // Base offsets.
         private PointF baseOffset = new PointF(3000, 100);
+        private Size mapSize;
 
         // Tile offsets from scenery/protos.
         private readonly float tileOffX = -64;
@@ -19,11 +20,15 @@
         private readonly int hexH = 16;
         private readonly int hexHEdge = 12; // height of left/right edge.
 
-        public FOHexMap() { }
+        public FOHexMap(Size mapSize) 
+        {
+            this.mapSize = mapSize;
+        }
 
-        public FOHexMap(PointF baseOffset)
+        public FOHexMap(PointF baseOffset, Size mapSize)
         {
             this.baseOffset = baseOffset;
+            this.mapSize = mapSize;
         }
 
         /// <summary>
@@ -38,6 +43,24 @@
             if (hex.X > 1) x += (hex.X / 2) * hexH;
 
             return new PointF(baseOffset.X + x, baseOffset.Y + y);
+        }
+
+        public Point GetHex(PointF coords)
+        {
+            for(int x = 0; x<mapSize.Width; x++)
+                for(int y=0; y<mapSize.Height; y++)
+                {
+                    Point hex = new Point(x,y);
+                    var calc = GetCoords(hex);
+
+                    float deltx = (coords.X - calc.X);
+                    float delty = (coords.Y - calc.Y);
+
+                    if ((deltx < 33 && deltx > -1) &&
+                        delty < 17 && delty > -1)
+                        return hex;
+                }
+            return new Point(-1, -1);
         }
 
         /// <summary>
