@@ -35,11 +35,7 @@
             float x = ((hex.Y * hexH) - (hex.X * hexW));
             float y = (Math.Abs((hex.Y + (hex.X / 2))) * hexHEdge);
 
-            if (!(hex.Y == 0 && hex.X == 0))
-            {
-                if (hex.X > 1)
-                    x += (hex.X / 2) * hexH;
-            }
+            if (hex.X > 1) x += (hex.X / 2) * hexH;
 
             return new PointF(baseOffset.X + x, baseOffset.Y + y);
         }
