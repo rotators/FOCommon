@@ -59,6 +59,7 @@
     <Compile Include="Dialog\Result.cs" />
     <Compile Include="Dialog\FuncCall.cs" />
     <Compile Include="Graphic\FalloutFrm.cs" />
+    <Compile Include="Maps\FOHexMap.cs" />
     <Compile Include="Maps\FOMap.cs" />
     <Compile Include="Maps\LineTracer.cs" />
     <Compile Include="Parsers\BagsParser.cs" />
