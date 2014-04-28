@@ -19,6 +19,7 @@ namespace FOCommon.Items
     }
 
     // Updated 2011-05-07
+    [Serializable]
     public class ItemProto : System.IComparable<ItemProto>
     {
         public ItemProto()

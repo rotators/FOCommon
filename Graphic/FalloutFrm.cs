@@ -6,6 +6,7 @@ using System.Drawing;
 
 namespace FOCommon.Graphic
 {
+    [Serializable]
     public class FalloutFRM
     {
         public string FileName { get; set; }
