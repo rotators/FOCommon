@@ -146,19 +146,28 @@ namespace FOCommon
             File.AppendAllText(_fileName, "[" + DateTime.Now.ToString() + "] " + Text + Environment.NewLine);
         }
 
-        // .NET name or R,G,B,A
-        public static Color GetColor(String Str)
+        // .NET name or R,G,B or R,G,B,A
+        public static Color GetColor(String Str, Char delim = ',')
         {
             Color Color;
-            if (Str.Contains(","))
+            if (Str.Contains(""+delim))
             {
-                String[] Parts = Str.Split(',');
-                if (Parts.Length != 4)
-                    return Color.Empty;
-                Color = Color.FromArgb(Int32.Parse(Parts[3]),
-                                       Int32.Parse(Parts[0]),
-                                       Int32.Parse(Parts[1]),
-                                       Int32.Parse(Parts[2]));
+                Color = Color.Empty;
+                String[] Parts = Str.Split(delim);
+                if (Parts.Length == 4)
+                {
+                    Color = Color.FromArgb(Int32.Parse(Parts[3]),
+                                           Int32.Parse(Parts[0]),
+                                           Int32.Parse(Parts[1]),
+                                           Int32.Parse(Parts[2]));
+                }
+                else if (Parts.Length == 3)
+                {
+                    Color = Color.FromArgb( Int32.Parse( Parts[0] ),
+                                            Int32.Parse( Parts[1] ),
+                                            Int32.Parse( Parts[2] ) );
+                }
+                return Color;
             }
             else
             {
