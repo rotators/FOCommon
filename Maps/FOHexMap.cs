@@ -16,9 +16,9 @@
         private readonly float tileOffY = -16;
 
         // Hex sizes
-        private readonly int hexW = 32;
-        private readonly int hexH = 16;
-        private readonly int hexHEdge = 12; // height of left/right edge.
+        public readonly int hexW = 32;
+        public readonly int hexH = 16;
+        public readonly int hexHEdge = 12; // height of left/right edge.
 
         public FOHexMap(Size mapSize) 
         {

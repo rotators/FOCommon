@@ -17,8 +17,8 @@ namespace FOCommon.Graphic
     /// <summary>
     /// Copyleft 1999 by Borg Locutus (dystopia@iname.com)
     /// See http://140.112.31.133/~Borg/f2/
-    /// Minor modifications by Wipe/Rotators
     /// </summary>
+    /// <remarks>Updated by Ghosthack, Wipe</remarks>
     public class FalloutFRMLoader // .frm
     {
         public static FalloutFRM LoadFRM(byte[] buffer, Color transparency)
