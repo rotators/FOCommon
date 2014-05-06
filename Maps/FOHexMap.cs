@@ -20,6 +20,10 @@
         public readonly int hexH = 16;
         public readonly int hexHEdge = 12; // height of left/right edge.
 
+        public FOHexMap( ushort width, ushort height )
+            : this( new Size( width, height ) )
+        { }
+
         public FOHexMap(Size mapSize) 
         {
             this.mapSize = mapSize;
