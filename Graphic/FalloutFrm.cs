@@ -12,6 +12,11 @@ namespace FOCommon.Graphic
         public string FileName { get; set; }
         public List<Bitmap> Frames;
         public Point PixelShift { get; set; }
+        public int FramesPerDir { get; set; }
+        public Bitmap GetAnimFrameByDir(int dir, int frame)
+        {
+            return Frames[(FramesPerDir * dir) + (frame-1)];
+        }
     }
 
     /// <summary>
@@ -27,6 +32,8 @@ namespace FOCommon.Graphic
             frm.Frames = Load(buffer, transparency);
             frm.PixelShift = new Point(FalloutFRMLoader.GetPixelShiftX(buffer),
                                        FalloutFRMLoader.GetPixelShiftY(buffer));
+            frm.FramesPerDir = (short)((buffer[0x08] << 8) + buffer[0x08 + 1]);
+
             return frm;
         }
 
