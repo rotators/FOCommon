@@ -8,7 +8,7 @@
     public class FOHexMap
     {
         // Base offsets.
-        private PointF baseOffset = new PointF(3000, 100);
+        private PointF baseOffset = new PointF(0, 0);
         private Size mapSize;
 
         // Tile offsets from scenery/protos.
@@ -23,6 +23,14 @@
         public FOHexMap( ushort width, ushort height )
             : this( new Size( width, height ) )
         { }
+
+        public enum Direction
+        {
+            Up,
+            Down,
+            Left,
+            Right
+        };
 
         public FOHexMap(Size mapSize) 
         {
@@ -39,14 +47,33 @@
         /// Common algoritm used for both tile placement and other objects.
         /// </summary>
         /// <returns></returns>
-        private PointF GetCoords(Point hex)
+        public PointF GetCoords(Point hex, bool useBaseOffset = true)
         {
             float x = ((hex.Y * hexH) - (hex.X * hexW));
             float y = (Math.Abs((hex.Y + (hex.X / 2))) * hexHEdge);
 
             if (hex.X > 1) x += (hex.X / 2) * hexH;
 
-            return new PointF(baseOffset.X + x, baseOffset.Y + y);
+            if (useBaseOffset)
+                return new PointF(baseOffset.X + x, baseOffset.Y + y);
+            else
+                return new PointF(x, y);
+        }
+
+        public PointF GetEdgeCoords(List<Point> hexes, Direction dir)
+        {
+            PointF coords = new PointF(0.0f, 0.0f);
+            PointF hc = new PointF();
+
+            foreach(Point hex in hexes)
+            {
+                hc = GetCoords(hex, false);
+                if (dir == Direction.Up    && hc.Y < coords.Y) coords = hc;
+                if (dir == Direction.Down  && hc.Y > coords.Y) coords = hc;
+                if (dir == Direction.Left  && hc.X < coords.X) coords = hc;
+                if (dir == Direction.Right && hc.X > coords.X) coords = hc;
+            }
+            return coords;
         }
 
         public Point GetHex(PointF coords)
