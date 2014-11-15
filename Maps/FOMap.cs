@@ -94,6 +94,7 @@ namespace FOCommon.Maps
         public UInt16 MapX;
         public UInt16 MapY;
         public Dictionary<string, string> Properties;
+        public Dictionary<string, int> CritterParams;
 
         public MapObject()
         {
@@ -102,6 +103,7 @@ namespace FOCommon.Maps
             MapX = 0;
             MapY = 0;
             Properties = new Dictionary<string, string>();
+            CritterParams = new Dictionary<string, int>();
         }
 
         public MapObject(int mapObjType, UInt16 protoId, UInt16 mapX, UInt16 mapY)
@@ -111,6 +113,7 @@ namespace FOCommon.Maps
             MapX = mapX;
             MapY = mapY;
             Properties = new Dictionary<string, string>();
+            CritterParams = new Dictionary<string, int>();
         }
 
         public object Clone()
@@ -118,6 +121,8 @@ namespace FOCommon.Maps
             MapObject obj = new MapObject(MapObjType, ProtoId, MapX, MapY);
             foreach (KeyValuePair<string, string> kvp in Properties)
                 obj.Properties.Add(kvp.Key, kvp.Value);
+            foreach (KeyValuePair<string, int> kvp in CritterParams)
+                obj.CritterParams.Add(kvp.Key, kvp.Value);
             return obj;
         }
     }

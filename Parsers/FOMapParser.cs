@@ -13,6 +13,7 @@ namespace FOCommon.Parsers
         public FOMap Map;
         public string FileName;
 
+
         enum ParseMode { Nothing, Header, Tiles, Objects, Finished }
         private ParseMode mode;
 
@@ -151,6 +152,7 @@ namespace FOCommon.Parsers
         private void parseObjects(StreamReader r)
         {
             MapObject obj = null;
+            string crIndex=null;
             while (!r.EndOfStream)
             {
                 string line = r.ReadLine();
@@ -179,6 +181,19 @@ namespace FOCommon.Parsers
                     obj.MapY = UInt16.Parse(spl[1]);
                     continue;
                 }
+
+                if (spl[0].StartsWith("Critter_ParamIndex"))
+                {
+                    crIndex = spl[1];
+                    continue;
+                }
+                if (spl[0].StartsWith("Critter_ParamValue"))
+                {
+                    if (!String.IsNullOrEmpty(crIndex))
+                        obj.CritterParams.Add(crIndex, Int32.Parse(spl[1]));
+                    continue;
+                }
+                
                 if (!obj.Properties.ContainsKey(spl[0]))
                     obj.Properties.Add(spl[0], spl[1]);
                 else
