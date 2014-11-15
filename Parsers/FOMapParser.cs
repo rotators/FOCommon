@@ -179,7 +179,10 @@ namespace FOCommon.Parsers
                     obj.MapY = UInt16.Parse(spl[1]);
                     continue;
                 }
-                obj.Properties.Add(spl[0], spl[1]);
+                if (!obj.Properties.ContainsKey(spl[0]))
+                    obj.Properties.Add(spl[0], spl[1]);
+                else
+                    obj.Properties[spl[0]] = spl[1];
             }
             if (obj != null) Map.AddObject(obj);
         }
