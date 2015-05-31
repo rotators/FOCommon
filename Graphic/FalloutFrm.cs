@@ -13,9 +13,16 @@ namespace FOCommon.Graphic
         public List<Bitmap> Frames;
         public Point PixelShift { get; set; }
         public int FramesPerDir { get; set; }
-        public Bitmap GetAnimFrameByDir(int dir, int frame)
+        public Bitmap GetAnimFrameByDir( int dir, int frame )
         {
-            return Frames[(FramesPerDir * dir) + (frame-1)];
+            if( Frames == null )
+                return (null);
+
+            int result = (FramesPerDir * dir) + (frame - 1);
+            if( result < 0 || result >= Frames.Count )
+                return (null);
+
+            return Frames[result];
         }
     }
 
@@ -23,7 +30,7 @@ namespace FOCommon.Graphic
     /// Copyleft 1999 by Borg Locutus (dystopia@iname.com)
     /// See http://140.112.31.133/~Borg/f2/
     /// </summary>
-    /// <remarks>Updated by Ghosthack, Wipe</remarks>
+    /// <remarks>Updated by Ghosthack, Wipe, cirn0</remarks>
     public class FalloutFRMLoader // .frm
     {
         public static FalloutFRM LoadFRM(byte[] buffer, Color transparency)
@@ -86,7 +93,14 @@ namespace FOCommon.Graphic
                 memStream.Seek(18L, SeekOrigin.Begin);
                 memStream.Write(BitConverter.GetBytes(width), 0, 4);
                 memStream.Write(BitConverter.GetBytes(height), 0, 4);
-                result.Add(new Bitmap(memStream));
+                Bitmap bmp = null;
+                try { bmp = new Bitmap( memStream ); }
+                catch( ArgumentException ) {}
+                finally
+                {
+                    if( bmp != null )
+                        result.Add( bmp );
+                }
                 memStream.Close();
                 chunkBegin += (12 + file_siz);
             }
@@ -261,7 +275,7 @@ namespace FOCommon.Graphic
                 0x85,0x00,0x57,0xEA,0x56,0x00,0x36,0xDF,0x58,0x00,0x29,0xCB,0x5A,0x00,0x30,0xB3,
                 0x56,0x00,0x36,0x98,0x4B,0x00,0xFE,0xFC,0xFE,0x00,0xE1,0xF2,0xF4,0x00,0xA8,0xCE,
                 0xDF,0x00,0x77,0x9F,0xB5,0x00,0x64,0x7F,0x8E,0x00,0x48,0x67,0x78,0x00,0x3A,0x4B,
-                0x58,0x00,0x22,0x29,0x36,0x00,0x0B,0x00,0x0B,0x00,0x36,0xA2,0x4B,0x00,0x00,0x91,
+                0x58,0x00,0x22,0x29,0x36,0x00,0x0B,0x00,0x0C,0x00,0x36,0xA2,0x4B,0x00,0x00,0x91,
                 0x00,0x00,0x11,0x95,0x1A,0x00,0x24,0x9B,0x36,0x00,0x91,0x8C,0x8C,0x00,0x9F,0x8A,
                 0x87,0x00,0xAC,0x8D,0x7B,0x00,0xBC,0xAF,0x00,0x00,0xFD,0xCE,0x8D,0x00,0x66,0x64,
                 0xE2,0x00,0x5B,0x58,0xC9,0x00,0x26,0x51,0xAB,0x00,0x36,0x92,0xF9,0x00,0x31,0x75,
