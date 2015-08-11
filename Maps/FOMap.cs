@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Linq;
-using System.Collections.Generic;
-using System.Dynamic;
+using System.Drawing;
 
 namespace FOCommon.Maps
 {
@@ -146,26 +144,21 @@ namespace FOCommon.Maps
         /// <param name="MX"></param>
         /// <param name="MY"></param>
         /// <returns></returns>
-        public dynamic GetOffset(int MX, int MY)
+        public Point GetOffset(int MX, int MY)
         {
             int X = 0;
             int Y = 0;
             if (Tiles.Count > 0)
             {
-                X = MX - Tiles.First().X;
-                Y = MY - Tiles.First().Y;
+                X = MX - Tiles[0].X;
+                Y = MY - Tiles[0].Y;
             }
             else
             {
-                X = MX - Objects.First().MapX;
-                Y = MY - Objects.First().MapY;
+                X = MX - Objects[0].MapX;
+                Y = MY - Objects[0].MapY;
             }
-
-            dynamic expando = new ExpandoObject();
-            expando.X = X;
-            expando.Y = Y;
-
-            return expando;
+            return new Point(X, Y);
         }
 
         /// <summary>
@@ -202,8 +195,8 @@ namespace FOCommon.Maps
         public object Clone()
         {
             Selection sel = new Selection();
-            sel.Tiles.AddRange(Tiles.Clone());
-            sel.Objects.AddRange(Objects.Clone());
+            Tiles.ForEach((item) => { sel.Tiles.Add((Tile)item.Clone()); });
+            Objects.ForEach((item) => { sel.Objects.Add((MapObject)item.Clone()); });
 
             return sel;
         }
