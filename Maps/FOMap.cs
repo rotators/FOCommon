@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
+using System.Collections.Generic;
+using System.Dynamic;
 
 namespace FOCommon.Maps
 {
@@ -47,6 +50,7 @@ namespace FOCommon.Maps
         public int Layer;
         public int OffsX;
         public int OffsY;
+        public int colorOverlay = 0;
 
         public Tile() { }
 
@@ -95,6 +99,7 @@ namespace FOCommon.Maps
         public UInt16 MapY;
         public Dictionary<string, string> Properties;
         public Dictionary<string, int> CritterParams;
+        public int colorOverlay = 0;
 
         public MapObject()
         {
@@ -124,6 +129,83 @@ namespace FOCommon.Maps
             foreach (KeyValuePair<string, int> kvp in CritterParams)
                 obj.CritterParams.Add(kvp.Key, kvp.Value);
             return obj;
+        }
+    }
+
+    public class Selection : ICloneable
+    {
+        private bool added;
+        public bool Added { get { return added; } set { added = value; } }
+
+        public List<Tile> Tiles = new List<Tile>();
+        public List<MapObject> Objects = new List<MapObject>();
+
+        /// <summary>
+        /// Get offset
+        /// </summary>
+        /// <param name="MX"></param>
+        /// <param name="MY"></param>
+        /// <returns></returns>
+        public dynamic GetOffset(int MX, int MY)
+        {
+            int X = 0;
+            int Y = 0;
+            if (Tiles.Count > 0)
+            {
+                X = MX - Tiles.First().X;
+                Y = MY - Tiles.First().Y;
+            }
+            else
+            {
+                X = MX - Objects.First().MapX;
+                Y = MY - Objects.First().MapY;
+            }
+
+            dynamic expando = new ExpandoObject();
+            expando.X = X;
+            expando.Y = Y;
+
+            return expando;
+        }
+
+        /// <summary>
+        /// Move selection object
+        /// </summary>
+        /// <param name="X"></param>
+        /// <param name="Y"></param>
+        public void MoveObject(int X, int Y)
+        {
+            Tiles.ForEach(a =>
+            {
+                a.X = (ushort)(a.X + X);
+                a.Y = (ushort)(a.Y + Y);
+            });
+
+            Objects.ForEach(a =>
+            {
+                a.MapX = (ushort)(a.MapX + X);
+                a.MapY = (ushort)(a.MapY + Y);
+            });
+        }
+
+        public void clear()
+        {
+            Tiles.Clear();
+            Objects.Clear();
+        }
+
+        public bool hasAny()
+        {
+            return Tiles.Count > 0 || Objects.Count > 0;
+        }
+
+        public object Clone()
+        {
+            Selection sel = new Selection();
+            sel.Tiles.AddRange(Tiles.Clone());
+            sel.Objects.AddRange(Objects.Clone());
+
+            return sel;
         }
     }
 
